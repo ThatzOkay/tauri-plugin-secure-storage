@@ -15,8 +15,7 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
 pub struct SecureStorage<R: Runtime>(AppHandle<R>);
 
 impl<R: Runtime> SecureStorage<R> {
-    pub fn set_synchronize_keychain(&self, payload: OptionsRequest) {}
-
+    
     pub fn get_item(&self, app: AppHandle<R>, payload: OptionsRequest) -> crate::Result<GetItemResponse> {
         let key = payload.prefixed_key;
 
