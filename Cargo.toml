@@ -1,0 +1,19 @@
+[package]
+name = "tauri-plugin-secure-storage"
+version = "1.0.0"
+authors = [ "ThatzOkay" ]
+description = "Tauri plugin for secure storage using the system's keyring."
+edition = "2021"
+rust-version = "1.77.2"
+exclude = ["/examples", "/dist-js", "/guest-js", "/node_modules"]
+links = "tauri-plugin-secure-storage"
+license = "MIT"
+
+[dependencies]
+tauri = { version = "2.6.2" }
+serde = "1.0"
+thiserror = "2"
+keyring = { version = "3", features = ["apple-native", "windows-native", "sync-secret-service"] }
+
+[build-dependencies]
+tauri-plugin = { version = "2.3.0", features = ["build"] }
