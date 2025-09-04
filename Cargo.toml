@@ -1,6 +1,6 @@
 [package]
 name = "tauri-plugin-secure-storage"
-version = "1.1.0"
+version = "1.2.0"
 authors = [ "ThatzOkay" ]
 description = "Tauri plugin for secure storage using the system's keyring."
 edition = "2021"

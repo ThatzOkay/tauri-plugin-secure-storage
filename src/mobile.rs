@@ -34,7 +34,7 @@ impl<R: Runtime> SecureStorage<R> {
             .map_err(Into::into)
     }
 
-    pub fn set_item(&self, app: AppHandle<R>, payload: OptionsRequest) -> crate::Result<String> {
+    pub fn set_item(&self, app: AppHandle<R>, payload: OptionsRequest) -> crate::Result<Option<String>> {
         self.0.run_mobile_plugin("setItem", payload)
             .map_err(Into::into)
     }

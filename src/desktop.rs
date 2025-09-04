@@ -45,7 +45,7 @@ impl<R: Runtime> SecureStorage<R> {
         }
     }
 
-    pub fn set_item(&self, app: AppHandle<R>, payload: OptionsRequest) -> crate::Result<String> {
+    pub fn set_item(&self, app: AppHandle<R>, payload: OptionsRequest) -> crate::Result<Option<String>> {
         let key = payload.prefixed_key;
 
         if key.is_none() {
@@ -64,7 +64,7 @@ impl<R: Runtime> SecureStorage<R> {
 
         match result {
             Ok(_) => {
-                Ok(payload_data)
+                Ok(Some(payload_data))
             }
             Err(e) => {
                 println!("{}", e);
