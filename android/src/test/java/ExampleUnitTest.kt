@@ -1,4 +1,4 @@
-package nl.thatzokay.secure-storage
+package nl.thatzokay.secureStorage
 
 import org.junit.Test
 

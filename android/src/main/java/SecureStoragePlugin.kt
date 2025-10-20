@@ -9,12 +9,21 @@ import android.util.Base64
 import android.util.Log
 import android.webkit.WebView
 import androidx.core.content.edit
+import androidx.datastore.dataStore
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import app.tauri.annotation.Command
 import app.tauri.annotation.InvokeArg
 import app.tauri.annotation.TauriPlugin
+import app.tauri.plugin.CommandData
 import app.tauri.plugin.Invoke
 import app.tauri.plugin.JSObject
 import app.tauri.plugin.Plugin
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.security.GeneralSecurityException
@@ -33,7 +42,7 @@ class OptionArgs {
 }
 
 fun interface StorageOp {
-    fun run()
+    suspend fun run()
 }
 
 @TauriPlugin
@@ -51,6 +60,9 @@ class SecureStoragePlugin(private val activity: Activity): Plugin(activity) {
         ks
     }
 
+    private val Context.dataStore by preferencesDataStore(name = SHARED_PREFERENCES)
+
+    @OptIn(DelicateCoroutinesApi::class)
     @Command
     fun setItem(invoke: Invoke) {
         val args = invoke.parseArgs(OptionArgs::class.java)
@@ -65,12 +77,15 @@ class SecureStoragePlugin(private val activity: Activity): Plugin(activity) {
             return
         }
 
-        tryStorageOp(invoke) {
-            storeDataInKeyStore(args.prefixedKey!!, args.data!!)
-            invoke.resolve()
+        GlobalScope.launch {
+            tryStorageOp(invoke) {
+                storeDataInDataStore(args.prefixedKey!!, args.data!!)
+                invoke.resolve()
+            }
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     @Command
     fun getItem(invoke: Invoke) {
         val args = invoke.parseArgs(OptionArgs::class.java)
@@ -83,17 +98,14 @@ class SecureStoragePlugin(private val activity: Activity): Plugin(activity) {
             return
         }
 
-        tryStorageOp(invoke) {
-            val data = getDataFromKeyStore(args.prefixedKey!!)
-            val result = JSObject()
-            result.put("data", data)
-            invoke.resolve(result)
+        GlobalScope.launch {
+            tryStorageOp(invoke) {
+                val data = getDataFromDataStore(args.prefixedKey!!)
+                val result = JSObject()
+                result.put("data", data)
+                invoke.resolve(result)
+            }
         }
-    }
-
-    fun pong(value: String): String {
-        Log.i("Pong", value)
-        return value
     }
 
     private fun getPrefs() : SharedPreferences {
@@ -106,6 +118,12 @@ class SecureStoragePlugin(private val activity: Activity): Plugin(activity) {
             .edit {
                 putString(prefixedKey, encryptString(data, prefixedKey))
             };
+    }
+
+    private suspend fun storeDataInDataStore(prefixedKey: String, data: String) {
+        activity.dataStore.edit { prefs ->
+            prefs[stringPreferencesKey(prefixedKey)] = encryptString(data, prefixedKey)
+        }
     }
 
     private fun getDataFromKeyStore(prefixedKey: String): String? {
@@ -126,7 +144,14 @@ class SecureStoragePlugin(private val activity: Activity): Plugin(activity) {
         }
     }
 
-    private fun tryStorageOp(invoke: Invoke, op: StorageOp) {
+    private suspend fun getDataFromDataStore(prefixedKey: String): String? {
+        val prefs = activity.dataStore.data.first()
+        val data = prefs[stringPreferencesKey(prefixedKey)]
+
+        return data?.let { decryptString(it, prefixedKey) }
+    }
+
+    private suspend fun tryStorageOp(invoke: Invoke, op: StorageOp) {
 
         val exception: KeyStoreException = try {
             op.run()
