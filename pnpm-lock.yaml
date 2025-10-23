@@ -17,7 +17,7 @@ importers:
     devDependencies:
       '@rollup/plugin-typescript':
         specifier: ^12.0.0
-        version: 12.1.4(rollup@4.44.2)(tslib@2.8.1)(typescript@5.8.3)
+        version: 12.1.4(rollup@4.44.2)(tslib@2.8.1)(typescript@5.9.3)
       rollup:
         specifier: ^4.9.6
         version: 4.44.2
@@ -26,7 +26,7 @@ importers:
         version: 2.8.1
       typescript:
         specifier: ^5.3.3
-        version: 5.8.3
+        version: 5.9.3
 
 packages:
 
@@ -204,18 +204,18 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  typescript@5.8.3:
-    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
 snapshots:
 
-  '@rollup/plugin-typescript@12.1.4(rollup@4.44.2)(tslib@2.8.1)(typescript@5.8.3)':
+  '@rollup/plugin-typescript@12.1.4(rollup@4.44.2)(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
       '@rollup/pluginutils': 5.2.0(rollup@4.44.2)
       resolve: 1.22.10
-      typescript: 5.8.3
+      typescript: 5.9.3
     optionalDependencies:
       rollup: 4.44.2
       tslib: 2.8.1
@@ -351,4 +351,4 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  typescript@5.8.3: {}
+  typescript@5.9.3: {}
