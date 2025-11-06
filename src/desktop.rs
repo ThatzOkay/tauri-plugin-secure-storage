@@ -72,4 +72,26 @@ impl<R: Runtime> SecureStorage<R> {
             }
         }
     }
+
+    pub fn remove_item(&self, app: AppHandle<R>, payload: OptionsRequest) -> crate::Result<bool> {
+        let key = payload.prefixed_key;
+
+        if key.is_none() {
+            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "Key not found").into());
+        }
+
+        let entry = Entry::new(&*app.config().product_name.clone().unwrap(), &*key.unwrap());
+
+        let result = entry.unwrap().delete_credential();
+
+        match result {
+            Ok(_) => {
+                Ok(true)
+            }
+            Err(e) => {
+                println!("{}", e);
+                Err(std::io::Error::new(std::io::ErrorKind::NotFound, "Key not found").into())
+            }
+        }
+    }
 }

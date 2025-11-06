@@ -6,6 +6,7 @@ Default permissions for the plugin
 
 - `allow-set-item`
 - `allow-get-item`
+- `allow-remove-item`
 
 ## Permission Table
 
@@ -64,6 +65,32 @@ Enables the ping command without any pre-configured scope.
 <td>
 
 Denies the ping command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`secure-storage:allow-remove-item`
+
+</td>
+<td>
+
+Enables the remove_item command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`secure-storage:deny-remove-item`
+
+</td>
+<td>
+
+Denies the remove_item command without any pre-configured scope.
 
 </td>
 </tr>

@@ -49,6 +49,17 @@ class SecureStoragePlugin: Plugin {
         }
     }
     
+    @objc func removeItem(_ call: Invoke) {
+        guard let key = getKeyParam(from: call) else {
+            return
+        }
+        
+        tryKeychainOp(call, getSyncParam(from: call)) {
+            let success = try deleteData(withKey: key)
+            call.resolve(["success": success])
+        }
+    }
+
     func getKeyParam(from call: Invoke) -> String? {
         do {
             let args = try call.getArgs()

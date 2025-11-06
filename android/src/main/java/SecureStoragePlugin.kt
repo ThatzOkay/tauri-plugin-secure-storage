@@ -108,6 +108,29 @@ class SecureStoragePlugin(private val activity: Activity): Plugin(activity) {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    @Command
+    fun removeItem(invoke: Invoke) {
+        val args = invoke.parseArgs(OptionArgs::class.java)
+
+        args.prefixedKey?.let { Log.i("prefixedKey", it) }
+
+        if (args.prefixedKey == null) {
+            KeyStoreException.reject(invoke, KeyStoreException.ErrorKind.invalidData)
+            return
+        }
+
+
+        GlobalScope.launch {
+            tryStorageOp(invoke) {
+                val deleted = deleteDataFromDataStore(args.prefixedKey!!)
+                val result = JSObject()
+                result.put("deleted", true)
+                invoke.resolve(result)
+            }
+        }
+    }
+
     private fun getPrefs() : SharedPreferences {
         return activity.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
@@ -149,6 +172,19 @@ class SecureStoragePlugin(private val activity: Activity): Plugin(activity) {
         val data = prefs[stringPreferencesKey(prefixedKey)]
 
         return data?.let { decryptString(it, prefixedKey) }
+    }
+
+    private suspend fun deleteDataFromDataStore(prefixedKey: String): Boolean {
+        return try {
+            val key = stringPreferencesKey(prefixedKey)
+            activity.dataStore.edit { prefs ->
+                prefs.remove(key)
+            }
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 
     private suspend fun tryStorageOp(invoke: Invoke, op: StorageOp) {

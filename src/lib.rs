@@ -35,7 +35,7 @@ impl<R: Runtime, T: Manager<R>> crate::SecureStorageExt<R> for T {
 /// Initializes the plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
   Builder::new("secure-storage")
-    .invoke_handler(tauri::generate_handler![commands::get_item, commands::set_item])
+    .invoke_handler(tauri::generate_handler![commands::get_item, commands::set_item, commands::remove_item])
     .setup(|app, api| {
       #[cfg(mobile)]
       let secure_storage = mobile::init(app, api)?;

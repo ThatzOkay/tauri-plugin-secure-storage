@@ -38,4 +38,9 @@ impl<R: Runtime> SecureStorage<R> {
         self.0.run_mobile_plugin("setItem", payload)
             .map_err(Into::into)
     }
+
+    pub fn remove_item(&self, app: AppHandle<R>, payload: OptionsRequest) -> crate::Result<bool> {
+        self.0.run_mobile_plugin("removeItem", payload)
+            .map_err(Into::into)
+    }
 }

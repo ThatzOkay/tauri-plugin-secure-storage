@@ -1,3 +1,3 @@
 [default]
 description = "Default permissions for the plugin"
-permissions = ["allow-set-item", "allow-get-item"]
+permissions = ["allow-set-item", "allow-get-item", "allow-remove-item"]
