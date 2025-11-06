@@ -18,17 +18,12 @@ class SecureStoragePlugin: Plugin {
     let kAccessOption = "access"
     let keychain = KeychainSwift()
     
-    @objc public func ping(_ invoke: Invoke) throws {
-        let args = try invoke.parseArgs(PingArgs.self)
-        invoke.resolve(["value": args.value ?? ""])
-    }
-    
     @objc func setSynchronizeKeychain(_ call: Invoke) {
         keychain.synchronizable = getSyncParam(from: call)
         call.resolve()
     }
     
-    @objc func internalSetItem(_ call: Invoke) {
+    @objc func setItem(_ call: Invoke) {
         // The getters will reject the call if the param is missing
         guard let key = getKeyParam(from: call),
               let data = getDataParam(from: call) else {
@@ -43,7 +38,7 @@ class SecureStoragePlugin: Plugin {
         }
     }
     
-    @objc func internalGetItem(_ call: Invoke)  {
+    @objc func getItem(_ call: Invoke)  {
         guard let key = getKeyParam(from: call) else {
             return
         }
