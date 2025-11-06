@@ -26,7 +26,7 @@ pub struct SecureStorage<R: Runtime>(PluginHandle<R>);
 
 impl<R: Runtime> SecureStorage<R> {
    pub fn set_synchronize_keychain(&self, payload: OptionsRequest) {
-       self.0.run_mobile_plugin::<()>("set_synchronize_keychain", payload).expect("Failed to run method");
+       self.0.run_mobile_plugin::<()>("setSynchronizeKeychain", payload).expect("Failed to run method");
    }
 
     pub fn get_item(&self, app: AppHandle<R>, payload: OptionsRequest) -> crate::Result<GetItemResponse> {
