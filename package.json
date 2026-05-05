@@ -1,5 +1,5 @@
 {
-  "name": "tauri-plugin-secure-storage",
+  "name": "tauri-plugin-secure-storage-api",
   "version": "1.5.0",
   "author": "ThatzOkay",
   "description": "Tauri plugin for secure storage using the system's keyring.",
