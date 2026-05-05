@@ -207,7 +207,9 @@ class SecureStorage implements SecureStoragePlugin {
         prefixedKey: string
         sync: boolean
     }): Promise<{ success: boolean }> {
-        return invoke<{ success: boolean }>('plugin:secure-storage|remove_item', options)
+        return invoke<{ success: boolean }>('plugin:secure-storage|remove_item', {
+            payload: options
+        })
     }
 
     async clear(sync?: boolean): Promise<void> {
@@ -219,7 +221,9 @@ class SecureStorage implements SecureStoragePlugin {
         prefix: string
         sync: boolean
     }): Promise<void> {
-        return invoke('plugin:secure-storage|clear_item_with_prefix', options)
+        return invoke('plugin:secure-storage|clear_item_with_prefix', {
+            payload: options
+        })
     }
 
     async keys(sync?: boolean): Promise<string[]> {
@@ -239,7 +243,9 @@ class SecureStorage implements SecureStoragePlugin {
         prefix: string
         sync: boolean
     }): Promise<{ keys: string[] }> {
-        return invoke<{ keys: string[] }>('plugin:secure-storage|get_prefixed_keys', options)
+        return invoke<{ keys: string[] }>('plugin:secure-storage|get_prefixed_keys', {
+            payload: options
+        })
     }
 
     async getKeyPrefix(): Promise<string> {
